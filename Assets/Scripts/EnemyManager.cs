@@ -22,4 +22,10 @@ public class EnemyManager : MonoBehaviour {
     public void RemoveUnit(int id) {
         units.Remove(id);
     }
+
+    public EnemyUnit GetUnit(int id)
+    {
+        //need to add handler for if id no longer exists
+        return units[id];
+    }
 }

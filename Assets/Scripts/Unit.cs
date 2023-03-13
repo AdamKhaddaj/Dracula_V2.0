@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class Unit : MonoBehaviour {
     private static int nextID;
 
-    private int id;
+    [SerializeField] private int id;
     private int level;
     private int health;
 

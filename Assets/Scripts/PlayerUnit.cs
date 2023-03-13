@@ -2,11 +2,11 @@ using UnityEngine;
 
 public abstract class PlayerUnit : Unit
 {
-    [SerializeField] private PlayerUnitBlueprint blueprint = null;
+    [SerializeField] public PlayerUnitBlueprint blueprint = null;
 
     private bool selected;
 
-    private Vector3 destination;
+    protected Vector3 destination;
 
     protected new Rigidbody rigidbody;
 
@@ -32,8 +32,10 @@ public abstract class PlayerUnit : Unit
 
     protected void Update()
     {
-        // temporary movement handling
-        if (blueprint.movable && Vector3.Distance(transform.position, destination) > 1)
+        // movement handling
+        // only consider x and z positions
+
+        if (blueprint.movable && Vector3.Distance(transform.position, destination) > 1f)
         {
             Vector3 direction = destination - transform.position;
             direction.y = 0;

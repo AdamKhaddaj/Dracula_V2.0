@@ -47,13 +47,23 @@ public class SelectionHandler : MonoBehaviour
 
             if (!dragging)
             {
-                int layer_mask = LayerMask.GetMask("Player");
+                //Only check for dynamic and static player units
+                int dynamic_layer_mask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
+                int static_layer_mask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+                int layermask = static_layer_mask | dynamic_layer_mask;
+
                 RaycastHit hit;
                 var ray = Camera.main.ScreenPointToRay(p1);
 
-                if (Physics.Raycast(ray, out hit, 1000f, layer_mask))
+                if (Physics.Raycast(ray, out hit, 1000f, layermask))
                 {
-                    if (Input.GetKey(KeyCode.LeftControl)) //for ctrl clicking
+                    //No matter what, if it's a pylon, it should deselect everything and select that pylon (for now only one pylon can be selected at a time)
+                    if(hit.transform.gameObject.GetComponent<PlayerPylon>() != null)
+                    {
+                        PlayerManager.instance.ClearSelectedUnits();
+                        PlayerManager.instance.AddSelectedUnit(hit.transform.gameObject.GetComponent<PlayerUnit>().GetID());
+                    }
+                    else if (Input.GetKey(KeyCode.LeftControl)) //for ctrl clicking
                     {
                         PlayerManager.instance.AddSelectedUnit(hit.transform.gameObject.GetComponent<PlayerUnit>().GetID());
                     }
@@ -161,7 +171,10 @@ public class SelectionHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider c)
     {
-        PlayerManager.instance.AddSelectedUnit(c.gameObject.GetComponent<PlayerUnit>().GetID());
+        if(LayerMask.NameToLayer("DynamicPlayerUnits") == c.gameObject.layer) //Click dragging should only ever select moveable units
+        {
+            PlayerManager.instance.AddSelectedUnit(c.gameObject.GetComponent<PlayerUnit>().GetID());
+        }
     }
 
 }

@@ -125,6 +125,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6267661061323207516}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0efae89ee229bb24db09a19d0497c629, type: 3}
+  m_Script: {fileID: 11500000, guid: 843129d32aacca54dbf3005cc8aa9190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blueprint: {fileID: 11400000, guid: c58c2ac9119795c4794b4d11fa333338, type: 2}

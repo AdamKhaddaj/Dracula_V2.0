@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10a41ef3a9d2b9b41bf3b4d8c23ef8c1, type: 3}
-  m_Name: P Attack
+  m_Script: {fileID: 11500000, guid: 6c9cadce83f596e45a445a311337bf7b, type: 3}
+  m_Name: E Guard
   m_EditorClassIdentifier: 
-  cost: 10
-  levelUpCost: 40
-  health: 50
+  health: 30
   movable: 1
-  moveSpeed: 5
-  color: {r: 0.26295832, g: 0.46873757, b: 0.745283, a: 0}
+  moveSpeed: 4
+  color: {r: 0.5471698, g: 0.14660019, b: 0.14660019, a: 0}

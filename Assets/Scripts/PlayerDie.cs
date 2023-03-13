@@ -24,6 +24,7 @@ public class PlayerDie : PlayerUnit
     }
     private void Start()
     {
+        base.Start();
         indicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         indicator.transform.position = gameObject.transform.position;
         indicator.GetComponent<Collider>().enabled = false;

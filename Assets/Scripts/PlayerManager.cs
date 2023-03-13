@@ -39,25 +39,24 @@ public class PlayerManager : MonoBehaviour {
     }
 
     private void Update() {
-        // temporary deselect all shortcut
 
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            ClearSelectedUnits();
-        }
-
-        // temporary movement handler
+        // movement handler
         if (Input.GetMouseButtonDown(1)) {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit)) {
-                if (hit.transform.name == "Terrain") {
+                if (hit.transform.name == "Terrain") { 
                     MoveSelectedUnits(hit.point);
+                }
+                else if (hit.transform.gameObject.GetComponent<EnemyUnit>() != null)
+                {
+                    TargetMoveSelectedUnits(hit.transform.gameObject.GetComponent<EnemyUnit>().GetID());
                 }
             }
         }
 
-        // temporary action handling
+            // temporary action handling
 
-        // custom action 1
-        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+            // custom action 1
+            if (Input.GetKeyDown(KeyCode.Alpha1)) {
             for (int i = 0; i < selectedUnits.Count; i++) {
                 units[selectedUnits[i]].Action1();
             }
@@ -147,6 +146,8 @@ public class PlayerManager : MonoBehaviour {
         pos.y = 0.5f;
         pos.x += 1.5f;
         GameObject g = Instantiate(attack, pos, Quaternion.identity);
+        int layer = LayerMask.NameToLayer("DynamicPlayerUnits");
+        g.layer = layer;
     }
 
     //UNIT LIST HANDLING
@@ -185,12 +186,31 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void MoveSelectedUnits(Vector3 destination) {
-        // set destination of all selected units
+        // set destination of all selected units, and set their states to 1 (which will be the state representing "commanded movement") for all dynamic units
+
         for (int i = 0; i < selectedUnits.Count; i++) {
+
+            if (units[selectedUnits[i]].GetComponent<PlayerAttack>() != null) //TEMPORARY, SINCE THE STATE SYSTEM IS ONLY IMPLEMENTED IN THE MELEE CLASS FOR NOW
+            {
+                units[selectedUnits[i]].GetComponent<PlayerAttack>().state = 1;
+            }
             units[selectedUnits[i]].SetDestination(destination);
+        }
+
+    }
+
+    public void TargetMoveSelectedUnits(int target)
+    {
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+
+            if (units[selectedUnits[i]].GetComponent<PlayerAttack>() != null) //TEMPORARY, SINCE THE STATE SYSTEM IS ONLY IMPLEMENTED IN THE MELEE CLASS FOR NOW
+            {
+                units[selectedUnits[i]].GetComponent<PlayerAttack>().target = EnemyManager.instance.GetUnit(target).GetID();
+                units[selectedUnits[i]].GetComponent<PlayerAttack>().state = 2;
+            }
+            units[selectedUnits[i]].SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
         }
     }
 
-
-    
 }
