@@ -11,10 +11,10 @@ namespace Dracula
         [SerializeField] private float zoomSpeed = 10.0f;
 
         [Header("Move Clamp")]
-        [SerializeField] private float positionMinX = -10.0f;
-        [SerializeField] private float positionMaxX = 10.0f;
-        [SerializeField] private float positionMinZ = -10.0f;
-        [SerializeField] private float positionMaxZ = 10.0f;
+        [SerializeField] private float positionMinX = -20.0f;
+        [SerializeField] private float positionMaxX = 20.0f;
+        [SerializeField] private float positionMinZ = -20.0f;
+        [SerializeField] private float positionMaxZ = 20.0f;
 
         [Header("Zoom Clamp")]
         [SerializeField] private float zoomMin = -10.0f;

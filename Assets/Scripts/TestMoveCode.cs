@@ -11,7 +11,7 @@ public class TestMoveCode : MonoBehaviour
     }
     void Update()
     {
-        Vector3 newpos = center + new Vector3(Mathf.Sin(Time.time *1.5f), 0, Mathf.Cos(Time.time*1.5f)) * 3;
+        Vector3 newpos = center + new Vector3(Mathf.Sin(Time.time *1.5f), 0, Mathf.Cos(Time.time*2.5f)) * 3;
         transform.position = newpos;
     }
 }

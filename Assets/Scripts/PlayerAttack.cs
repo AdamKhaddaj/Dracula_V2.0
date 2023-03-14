@@ -82,7 +82,7 @@ public class PlayerAttack : PlayerUnit {
 
             if (true) //need to do dictionary checking handling stuff, for now it'll be always true
             {
-                                    base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
+                base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
 
                 if (!attacking)
                 {

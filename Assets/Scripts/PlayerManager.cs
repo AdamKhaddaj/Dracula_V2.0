@@ -31,6 +31,7 @@ public class PlayerManager : MonoBehaviour {
 
         units = new Dictionary<int, PlayerUnit>();
         selectedUnits = new List<int>();
+
     }
 
     private void Start()
@@ -53,13 +54,82 @@ public class PlayerManager : MonoBehaviour {
             }
         }
 
-            // temporary action handling
+        // UI handling
+        // NOTE: This method is taxing and a little ugly, we can achieve the same thing by using a state system 
+        int pylonstate = 1;
+        int meleestate = 1;
+        int healerstate = 1;
+        int rangerstate = 1;
 
-            // custom action 1
-            if (Input.GetKeyDown(KeyCode.Alpha1)) {
-            for (int i = 0; i < selectedUnits.Count; i++) {
-                units[selectedUnits[i]].Action1();
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            if(units[selectedUnits[i]].GetComponent<PlayerAttack>() != null)
+            {
+                pylonstate = 0;
+                healerstate = 0;
+                rangerstate = 0;
             }
+            if (units[selectedUnits[i]].GetComponent<PlayerSupport>() != null)
+            {
+                pylonstate = 0;
+                meleestate = 0;
+                rangerstate = 0;
+            }
+            if (units[selectedUnits[i]].GetComponent<PlayerPylon>() != null)
+            {
+                meleestate = 0;
+                healerstate = 0;
+                rangerstate = 0;
+            }
+            if (units[selectedUnits[i]].GetComponent<PlayerRanged>() != null)
+            {
+                pylonstate = 0;
+                healerstate = 0;
+                rangerstate = 0;
+            }
+
+        }
+
+        int[] arr = { pylonstate, meleestate, healerstate, rangerstate };
+        int sum = 0;
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            sum += arr[i];
+        }
+
+        if (sum == 0 || sum == 4)
+        {
+            UIManager.instance.SetUIstate(0);
+        }
+        else
+        {
+            if (pylonstate==1)
+            {
+
+                UIManager.instance.SetUIstate(1);
+            }
+            if (meleestate == 1)
+            {
+                UIManager.instance.SetUIstate(2);
+            }
+            if (healerstate == 1)
+            {
+                UIManager.instance.SetUIstate(3);
+            }
+            if (rangerstate == 1)
+            {
+                UIManager.instance.SetUIstate(4);
+            }
+        }
+
+        // temporary action handling
+
+        // custom action 1
+        if (Input.GetKeyDown(KeyCode.Alpha1)) {
+        for (int i = 0; i < selectedUnits.Count; i++) {
+            units[selectedUnits[i]].Action1();
+        }
         }
 
         // custom action 2
@@ -168,6 +238,7 @@ public class PlayerManager : MonoBehaviour {
     // SELECTION HANDLING
 
     public void AddSelectedUnit(int id) {
+
         units[id].Select();
         selectedUnits.Add(id);
     }
@@ -178,6 +249,8 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void ClearSelectedUnits() {
+
+        UIManager.instance.UIstate = 0;
         for (int i = 0; i < selectedUnits.Count; i++) {
             units[selectedUnits[i]].Deselect();
         }

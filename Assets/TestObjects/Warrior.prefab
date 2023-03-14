@@ -127,4 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 306592177999e7a4582990913d846de2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
   blueprint: {fileID: 11400000, guid: 1071d9018176040488fa07a21594e3c2, type: 2}
+  state: 0
+  target: 0

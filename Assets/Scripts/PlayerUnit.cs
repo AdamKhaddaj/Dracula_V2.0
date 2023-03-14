@@ -47,6 +47,7 @@ public abstract class PlayerUnit : Unit
         {
             rigidbody.velocity = Vector3.zero;
         }
+
     }
 
     private void OnMouseOver()

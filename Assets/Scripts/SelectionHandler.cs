@@ -7,6 +7,7 @@ public class SelectionHandler : MonoBehaviour
     // NOTE: some segments of this code borrows from https://github.com/pickles976/RTS_selection/blob/master/global_selection.cs
 
     bool dragging;
+    bool UIclicking;
 
     //for the rectangle that appears during click and dragon
     MeshCollider selectionBox;
@@ -21,10 +22,10 @@ public class SelectionHandler : MonoBehaviour
     //vertices of box we make to send out raycasts and actually do selections
     Vector3[] boxvertices;
 
-
     void Start()
     {
         dragging = false;
+        UIclicking = false;
     }
 
     // Update is called once per frame
@@ -32,10 +33,20 @@ public class SelectionHandler : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0)) //single click
         {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) //Don't do selection handling stuff if a UI button is being clicked
+            {
+                Debug.Log("clicking UI");
+                UIclicking = true;
+                return;
+            }
             p1 = Input.mousePosition;
         }
         if (Input.GetMouseButton(0)) //check for dragging
         {
+            if (UIclicking)
+            {
+                return;
+            }
             if ((p1 - Input.mousePosition).magnitude > 30)
             {
                 dragging = true;
@@ -44,6 +55,11 @@ public class SelectionHandler : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0)) //on mouse release
         {
+            if (UIclicking)
+            {
+                UIclicking = false;
+                return;
+            }
 
             if (!dragging)
             {
@@ -89,11 +105,14 @@ public class SelectionHandler : MonoBehaviour
 
                 for (int i = 0; i < corners.Length; i++)
                 {
-                    int layer_mask = LayerMask.GetMask("Terrain");
+                    //Bug note: when doing drag select, if you start the drag or end the drag while pointing at the skybox, the raycast stuff doesn't work properly. 
+
+                    //int layer_mask = LayerMask.GetMask("Terrain"); 
+
                     RaycastHit hit;
                     var ray = Camera.main.ScreenPointToRay(corners[i]);
 
-                    if (Physics.Raycast(ray, out hit, 1000f, layer_mask))
+                    if (Physics.Raycast(ray, out hit, 1000f))
                     {
                         boxvertices[i] = new Vector3(hit.point.x, 0, hit.point.z);
                     }
