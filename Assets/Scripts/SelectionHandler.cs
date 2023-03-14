@@ -35,7 +35,6 @@ public class SelectionHandler : MonoBehaviour
         {
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) //Don't do selection handling stuff if a UI button is being clicked
             {
-                Debug.Log("clicking UI");
                 UIclicking = true;
                 return;
             }

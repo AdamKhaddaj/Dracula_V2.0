@@ -125,12 +125,6 @@ public class PlayerManager : MonoBehaviour {
 
         // temporary action handling
 
-        // custom action 1
-        if (Input.GetKeyDown(KeyCode.Alpha1)) {
-        for (int i = 0; i < selectedUnits.Count; i++) {
-            units[selectedUnits[i]].Action1();
-        }
-        }
 
         // custom action 2
         if (Input.GetKeyDown(KeyCode.Alpha2)) {
@@ -164,6 +158,31 @@ public class PlayerManager : MonoBehaviour {
         }
     }
 
+    // custom action 1
+    public void UIaction1() {
+        for (int i = 0; i<selectedUnits.Count; i++) {
+            units[selectedUnits[i]].Action1();
+        }
+    }
+
+    // custom action 2
+    public void UIaction2()
+    {
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            units[selectedUnits[i]].Action2();
+        }
+    }
+
+    // custom action 2
+    public void UIaction3()
+    {
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            units[selectedUnits[i]].Action3();
+        }
+    }
+
     //RESOURCE HANDLING
 
     public int GetCrystals() {
@@ -183,6 +202,7 @@ public class PlayerManager : MonoBehaviour {
 
     public void RemoveCrystals(int x) {
         crystals = Mathf.Max(crystals - x, 0);
+        UIManager.instance.UpdateCrystals(crystals);
     }
 
     public int GetStardust() {

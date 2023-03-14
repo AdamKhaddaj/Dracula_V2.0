@@ -22,6 +22,15 @@ public class PlayerDie : PlayerUnit
     {
 
     }
+
+    public override void Action4()
+    {
+    }
+
+    public override void Action5()
+    {
+    }
+
     private void Start()
     {
         base.Start();

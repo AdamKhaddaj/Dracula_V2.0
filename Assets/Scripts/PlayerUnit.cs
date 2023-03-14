@@ -93,6 +93,8 @@ public abstract class PlayerUnit : Unit
     public abstract void Action1();
     public abstract void Action2();
     public abstract void Action3();
+    public abstract void Action4();
+    public abstract void Action5();
 
     // level up unit
     public new bool LevelUp()

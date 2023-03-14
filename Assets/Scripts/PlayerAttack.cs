@@ -143,4 +143,7 @@ public class PlayerAttack : PlayerUnit {
     public override void Action3() {
 
     }
+
+    public override void Action4() { }
+    public override void Action5() { }
 }
