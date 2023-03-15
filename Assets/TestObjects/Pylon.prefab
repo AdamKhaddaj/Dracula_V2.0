@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 3989491980664008297}
   - component: {fileID: 250102521998159395}
   - component: {fileID: 8505423221544956373}
+  - component: {fileID: -7497581912319414475}
   m_Layer: 8
   m_Name: Pylon
   m_TagString: Untagged
@@ -112,5 +113,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  healthbar: {fileID: 6908653211481521164, guid: 0aaf382b38665c74f804a517c5728372, type: 3}
+  health: 0
   blueprint: {fileID: 11400000, guid: ea39d680e3735d749b4b9e64a1894354, type: 2}
+  agent: {fileID: 0}
+--- !u!195 &-7497581912319414475
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3828900111591487615}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5000001
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4

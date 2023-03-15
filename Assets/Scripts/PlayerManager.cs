@@ -44,7 +44,7 @@ public class PlayerManager : MonoBehaviour {
         // movement handler
         if (Input.GetMouseButtonDown(1)) {
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit)) {
-                if (hit.transform.name == "Terrain") { 
+                if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain")) { 
                     MoveSelectedUnits(hit.point);
                 }
                 else if (hit.transform.gameObject.GetComponent<EnemyUnit>() != null)

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.AI;
 
 public abstract class PlayerUnit : Unit
 {
@@ -9,6 +10,8 @@ public abstract class PlayerUnit : Unit
     protected Vector3 destination;
 
     protected new Rigidbody rigidbody;
+
+    public NavMeshAgent agent;
 
     private void Awake()
     {
@@ -22,6 +25,9 @@ public abstract class PlayerUnit : Unit
 
         rigidbody = GetComponent<Rigidbody>();
 
+        agent.autoBraking = false;
+        agent.acceleration = 90;
+
     }
 
     protected void Start()
@@ -32,8 +38,25 @@ public abstract class PlayerUnit : Unit
 
     protected void Update()
     {
-        // movement handling
-        // only consider x and z positions for now, this is mainly to fix the healer unit bug
+
+        //temp fix for while PlayerUnit contains both dynamic and static units
+        if ((GetComponent<PlayerPylon>() != null) || (GetComponent<PlayerDie>() != null))
+        {
+            return;
+        }
+
+        // NavMeshCode
+        if (blueprint.movable && Vector3.Distance(transform.position, destination) > 1f)
+        {
+            agent.isStopped = false;
+            agent.SetDestination(destination);
+        }
+        else
+        {
+            agent.isStopped = true;
+        }
+
+        /*
         Vector3 true_destination = new Vector3(destination.x, transform.position.y, destination.z);
 
         if (blueprint.movable && Vector3.Distance(transform.position, true_destination) > 1f)
@@ -48,30 +71,8 @@ public abstract class PlayerUnit : Unit
         {
             rigidbody.velocity = Vector3.zero;
         }
-
-    }
-
-    private void OnMouseOver()
-    {
-        /*
-        // temporary selection handling 
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (selected)
-            {
-                PlayerManager.instance.RemoveSelectedUnit(GetID());
-            }
-            else
-            {
-                if (!Input.GetKey(KeyCode.LeftControl))
-                {
-                    PlayerManager.instance.ClearSelectedUnits();
-                }
-
-                PlayerManager.instance.AddSelectedUnit(GetID());
-            }
-        }
         */
+
     }
 
     public void Select()

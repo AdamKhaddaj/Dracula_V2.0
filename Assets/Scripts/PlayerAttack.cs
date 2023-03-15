@@ -22,6 +22,10 @@ public class PlayerAttack : PlayerUnit {
         base.Update();
         if (state==0) //The following code makes the unit automatically target an enemy unit only if it's within a certain radius and if the player unit idle
         {
+
+            base.agent.isStopped = true;
+            rigidbody.velocity = Vector3.zero;
+
             int layer_mask = LayerMask.GetMask("Enemy");
             Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 3f, layer_mask);
 
@@ -30,6 +34,7 @@ public class PlayerAttack : PlayerUnit {
                 //A target needs to be picked if there are multiple enemies. Pick the nearest enemy
                 float closest = Mathf.Infinity;
                 int closest_target = -1;
+
                 for (int i = 0; i < colliders.Length; i++)
                 {
                     EnemyUnit enemyUnit = colliders[i].GetComponent<EnemyUnit>();
@@ -39,6 +44,7 @@ public class PlayerAttack : PlayerUnit {
                         closest = Vector3.Distance(transform.position, enemyUnit.gameObject.transform.position);
                     }
                 }
+
                 target = closest_target;
                 state = 2;
                 base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
@@ -62,7 +68,7 @@ public class PlayerAttack : PlayerUnit {
                 target = -1;
             }
 
-            else{ //need to do dictionary checking handling stuff, for now it'll be always true
+            else{
                 EnemyUnit e = EnemyManager.instance.GetUnit(target);
 
                 //Check if either a) the target is close enough that this unit can attack it, or b) this unit should move towrads it
@@ -72,6 +78,9 @@ public class PlayerAttack : PlayerUnit {
                 }
                 else
                 {
+                    // speed up slowly, but stop quickly
+                    
+
                     base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
                 }
             }
@@ -102,6 +111,7 @@ public class PlayerAttack : PlayerUnit {
                 }
             }
         }
+
     }
 
     IEnumerator DealDamage(int target)
@@ -122,6 +132,7 @@ public class PlayerAttack : PlayerUnit {
                 yield break;
             }
 
+            //Actually deal the damage
             EnemyUnit e = EnemyManager.instance.GetUnit(target);
             e.RemoveHealth(5);
 
