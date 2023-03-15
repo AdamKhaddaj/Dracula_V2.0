@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cost: 0
   levelUpCost: 0
-  health: 0
+  health: 60
   movable: 0
   moveSpeed: 0
   color: {r: 0.35668, g: 0.7264151, b: 0.16035953, a: 0}

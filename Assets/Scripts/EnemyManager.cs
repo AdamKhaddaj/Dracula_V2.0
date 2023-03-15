@@ -19,13 +19,22 @@ public class EnemyManager : MonoBehaviour {
         units.Add(unit.GetID(), unit);
     }
 
-    public void RemoveUnit(int id) {
-        units.Remove(id);
+    public void RemoveUnit(int id)
+    {
+
+        Destroy(units[id].gameObject);
+
+        if (!units.Remove(id))
+        {
+            return;
+        }
     }
 
     public EnemyUnit GetUnit(int id)
     {
-        //need to add handler for if id no longer exists
-        return units[id];
+        EnemyUnit e;
+        units.TryGetValue(id, out e);
+        return e;
     }
+    
 }

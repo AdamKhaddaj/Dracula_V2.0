@@ -128,4 +128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 843129d32aacca54dbf3005cc8aa9190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  healthbar: {fileID: 6908653211481521164, guid: 0aaf382b38665c74f804a517c5728372, type: 3}
   blueprint: {fileID: 11400000, guid: c58c2ac9119795c4794b4d11fa333338, type: 2}

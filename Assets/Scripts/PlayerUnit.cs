@@ -33,9 +33,10 @@ public abstract class PlayerUnit : Unit
     protected void Update()
     {
         // movement handling
-        // only consider x and z positions
+        // only consider x and z positions for now, this is mainly to fix the healer unit bug
+        Vector3 true_destination = new Vector3(destination.x, transform.position.y, destination.z);
 
-        if (blueprint.movable && Vector3.Distance(transform.position, destination) > 1f)
+        if (blueprint.movable && Vector3.Distance(transform.position, true_destination) > 1f)
         {
             Vector3 direction = destination - transform.position;
             direction.y = 0;
@@ -119,6 +120,5 @@ public abstract class PlayerUnit : Unit
         PlayerManager.instance.RemoveUnit(GetID());
         PlayerManager.instance.AddCrystals(blueprint.cost);
 
-        Destroy(gameObject);
     }
 }

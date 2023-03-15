@@ -127,4 +127,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c17eb81ea1fdc847a9b60cd03b1b8e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  healthbar: {fileID: 6908653211481521164, guid: 0aaf382b38665c74f804a517c5728372, type: 3}
   blueprint: {fileID: 11400000, guid: 44de7c62ca6cedc44b818786387209b9, type: 2}

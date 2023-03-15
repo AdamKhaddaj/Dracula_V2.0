@@ -128,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
+  healthbar: {fileID: 6908653211481521164, guid: 0aaf382b38665c74f804a517c5728372, type: 3}
   blueprint: {fileID: 11400000, guid: 1071d9018176040488fa07a21594e3c2, type: 2}
   state: 0
   target: 0

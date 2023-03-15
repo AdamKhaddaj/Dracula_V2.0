@@ -62,25 +62,6 @@ public class UIManager : MonoBehaviour
     void Update()
     {
 
-        // TEST CODE ============================================
-        if (Input.GetKeyDown("6"))
-        {
-            SetUIstate(0);
-        }
-        if (Input.GetKeyDown("7"))
-        {
-            SetUIstate(1);
-        }
-        if (Input.GetKeyDown("8"))
-        {
-            SetUIstate(2);
-        }
-        if (Input.GetKeyDown("9"))
-        {
-            SetUIstate(3);
-        }
-        // TEST CODE END ===============================================
-
 
         if (UIstate == 0)
         {

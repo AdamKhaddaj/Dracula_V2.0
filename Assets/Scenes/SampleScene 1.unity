@@ -978,6 +978,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7432396459631767163, guid: c63dc35afa890294aa5c2f5ef6bd6bb6, type: 3}
+      propertyPath: healthbar
+      value: 
+      objectReference: {fileID: 6908653211481521164, guid: 0aaf382b38665c74f804a517c5728372, type: 3}
+    - target: {fileID: 7432396459631767163, guid: c63dc35afa890294aa5c2f5ef6bd6bb6, type: 3}
       propertyPath: hoverspeed
       value: 1
       objectReference: {fileID: 0}
@@ -2286,5 +2290,9 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 8505423221544956373, guid: a08966dcec6ca984d8a36b25db0cd580, type: 3}
+      propertyPath: healthbar
+      value: 
+      objectReference: {fileID: 6908653211481521164, guid: 0aaf382b38665c74f804a517c5728372, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a08966dcec6ca984d8a36b25db0cd580, type: 3}

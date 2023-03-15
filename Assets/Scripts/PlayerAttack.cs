@@ -44,6 +44,7 @@ public class PlayerAttack : PlayerUnit {
                 base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
             }
         }
+
         if (state == 1) //If this unit has been commanded to move somewhere, nothing should break it from trying to get to that location other than it reaching that location
         {
             if(Vector3.Distance(transform.position, base.destination) < 1f)
@@ -51,11 +52,17 @@ public class PlayerAttack : PlayerUnit {
                 state = 0;
             }
         }
+
         if (state == 2) 
         {
-            //First, check if it's target still exists. If not, it should stop targetting
+            //first check if the unit exists anymore, if not, stop coroutine
+            if (EnemyManager.instance.GetUnit(target) == null)
+            {
+                state = 0;
+                target = -1;
+            }
 
-            if (true){ //need to do dictionary checking handling stuff, for now it'll be always true
+            else{ //need to do dictionary checking handling stuff, for now it'll be always true
                 EnemyUnit e = EnemyManager.instance.GetUnit(target);
 
                 //Check if either a) the target is close enough that this unit can attack it, or b) this unit should move towrads it
@@ -67,20 +74,19 @@ public class PlayerAttack : PlayerUnit {
                 {
                     base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
                 }
-
-            }
-            else
-            {
-                state = 0;
-                target = -1;
             }
         }
 
         if (state == 3) //This state means this unit is capable of attacking it's target
         {
-            //First, check if it's target still exists. If not, it should stop targetting
+            //first check if the unit exists anymore, if not, stop coroutine
+            if (EnemyManager.instance.GetUnit(target) == null)
+            {
+                state = 0;
+                target = -1;
+            }
 
-            if (true) //need to do dictionary checking handling stuff, for now it'll be always true
+            else 
             {
                 base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
 
@@ -95,20 +101,27 @@ public class PlayerAttack : PlayerUnit {
                     state = 2;
                 }
             }
-            else
-            {
-                state = 0;
-                target = -1;
-            }
         }
     }
 
     IEnumerator DealDamage(int target)
     {
+        //first check if the unit exists anymore, if not, stop coroutine
+        if(EnemyManager.instance.GetUnit(target) == null){
+            attacking = false;
+            yield break;
+        }
+
         yield return new WaitForSeconds(0.5f); 
         while(state==3)
         {
-            //First, enemy unit takes damage
+            //first check if the unit exists anymore, if not, stop coroutine
+            if (EnemyManager.instance.GetUnit(target) == null)
+            {
+                attacking = false;
+                yield break;
+            }
+
             EnemyUnit e = EnemyManager.instance.GetUnit(target);
             e.RemoveHealth(5);
 
@@ -121,8 +134,10 @@ public class PlayerAttack : PlayerUnit {
             yield return new WaitForSeconds(2f); //attack every two seconds
         }
         attacking = false;
+        yield break;
     }
 
+    //None of the following are implemented yet
     public override void Action1() { //should be obsolete now
         int layer_mask = LayerMask.GetMask("Enemy");
         Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position,2f, layer_mask);

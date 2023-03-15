@@ -247,12 +247,19 @@ public class PlayerManager : MonoBehaviour {
     }
 
     public void RemoveUnit(int id) {
+
+        // if a unit dies while selected then remove from selected units
+        if (selectedUnits.Contains(id))
+        {
+            RemoveSelectedUnit(id);
+        }
+
+        Destroy(units[id].gameObject);
+
         if (!units.Remove(id)) {
             return;
         }
 
-        // if a unit dies while selected then remove from selected units
-        RemoveSelectedUnit(id);
     }
 
     // SELECTION HANDLING
