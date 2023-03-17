@@ -11,8 +11,6 @@ public abstract class PlayerUnit : Unit
 
     protected new Rigidbody rigidbody;
 
-    public NavMeshAgent agent;
-
     private void Awake()
     {
         // unit setup
@@ -54,6 +52,7 @@ public abstract class PlayerUnit : Unit
         else
         {
             agent.isStopped = true;
+            agent.SetDestination(transform.position);
         }
 
         /*

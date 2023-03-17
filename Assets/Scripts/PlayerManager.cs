@@ -233,8 +233,23 @@ public class PlayerManager : MonoBehaviour {
 
     public void CreateWarrior(Vector3 pos)
     {
+        //check if area where it's spawning will cause no collisions:
+
+        //radius check value will be constant for now, eventually once this function is updated to spawn any kind of unity, we'd pass through the agent.radius value
         pos.y = 0.5f;
-        pos.x += 1.5f;
+        pos.x += 1f;
+        int dynamicmask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
+        int staticmask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+        int mask = dynamicmask | staticmask;
+
+        var collisioncheck = Physics.OverlapSphere(pos, 1f, mask);
+
+        while(collisioncheck.Length != 0)
+        {
+            pos.x += 1; //move it over to the right, this can also change eventually
+            collisioncheck = Physics.OverlapSphere(pos, 1f, mask);
+        }
+
         GameObject g = Instantiate(attack, pos, Quaternion.identity);
         int layer = LayerMask.NameToLayer("DynamicPlayerUnits");
         g.layer = layer;

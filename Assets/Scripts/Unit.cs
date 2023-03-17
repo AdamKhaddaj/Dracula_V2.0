@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.AI;
 
 public abstract class Unit : MonoBehaviour {
     private static int nextID;
@@ -7,6 +7,8 @@ public abstract class Unit : MonoBehaviour {
     [SerializeField] private int id;
     private int level;
     [SerializeField] private int health;
+
+    public NavMeshAgent agent;
 
 
     protected void Setup(int health) {
