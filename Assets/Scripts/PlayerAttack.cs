@@ -6,6 +6,7 @@ public class PlayerAttack : PlayerUnit {
     [SerializeField] public int state; //only serialize field so it can be seen for debugging purposes
     public int target;
     private bool attacking;
+
     private void Start()
     {
         base.Start();
@@ -15,6 +16,9 @@ public class PlayerAttack : PlayerUnit {
         state = 0;
         target = -1;
         attacking = false;
+
+        //IMPLEMENT WALKING ANIMATION LATER
+        animator.SetBool("isWalking", false);
     }
 
     private void Update()
@@ -27,7 +31,7 @@ public class PlayerAttack : PlayerUnit {
             rigidbody.velocity = Vector3.zero;
 
             int layer_mask = LayerMask.GetMask("Enemy");
-            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 3f, layer_mask);
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 12f, layer_mask);
 
             if(colliders.Length > 0) //There is an enemy in aggro
             {
@@ -53,7 +57,7 @@ public class PlayerAttack : PlayerUnit {
 
         if (state == 1) //If this unit has been commanded to move somewhere, nothing should break it from trying to get to that location other than it reaching that location
         {
-            if(Vector3.Distance(transform.position, base.destination) < 1f)
+            if(Vector3.Distance(transform.position, base.destination) < 1.5f)
             {
                 state = 0;
             }
@@ -73,14 +77,12 @@ public class PlayerAttack : PlayerUnit {
 
                 //Check if either a) the target is close enough that this unit can attack it, or b) this unit should move towrads it
 
-                if (Vector3.Distance(transform.position, base.destination) < 1.5f){
+                if (Vector3.Distance(transform.position, base.destination) < 4f){
                     state = 3;
+                    base.SetDestination(transform.position);
                 }
                 else
-                {
-                    // speed up slowly, but stop quickly
-                    
-
+                {                    
                     base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
                 }
             }
@@ -97,7 +99,6 @@ public class PlayerAttack : PlayerUnit {
 
             else 
             {
-                base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
 
                 if (!attacking)
                 {
@@ -105,11 +106,31 @@ public class PlayerAttack : PlayerUnit {
                     StartCoroutine(DealDamage(target));
                 }
 
-                if (Vector3.Distance(transform.position, base.destination) > 1.5f)
+                if (Vector3.Distance(transform.position, base.destination) > 4f)
                 {
                     state = 2;
                 }
             }
+        }
+
+        //Animation handling
+        if (state==0)
+        {
+
+            animator.SetBool("isRunning", false);
+            animator.SetBool("spin", false);
+        }
+        else if (state==1 || state==2)
+        {
+            animator.SetBool("isRunning", true);
+
+            animator.SetBool("spin", false);
+        }
+        else if(state==3)
+        {
+            animator.SetBool("isRunning", false);
+
+            animator.SetBool("spin", true);
         }
 
     }
@@ -137,10 +158,10 @@ public class PlayerAttack : PlayerUnit {
             e.RemoveHealth(5);
 
             //DEBUGGING TO SHOW THAT ATTACKING IS HAPPENING
-            Color orig = gameObject.GetComponent<Renderer>().material.color;
-            gameObject.GetComponent<Renderer>().material.color = Color.red;
+            Color orig = transform.GetChild(0).GetComponent<Renderer>().material.color;
+            gameObject.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.red;
             yield return new WaitForSeconds(0.2f); //flash red for a quick second
-            gameObject.GetComponent<Renderer>().material.color = orig;
+            gameObject.transform.GetChild(0).GetComponent<Renderer>().material.color = orig;
 
             yield return new WaitForSeconds(2f); //attack every two seconds
         }

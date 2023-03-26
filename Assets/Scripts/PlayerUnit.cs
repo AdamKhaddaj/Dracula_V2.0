@@ -11,6 +11,10 @@ public abstract class PlayerUnit : Unit
 
     protected new Rigidbody rigidbody;
 
+    protected Animator animator;
+
+    private Color orig;
+
     private void Awake()
     {
         // unit setup
@@ -22,16 +26,21 @@ public abstract class PlayerUnit : Unit
         destination = transform.position;
 
         rigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
 
         agent.autoBraking = false;
         agent.acceleration = 90;
+        agent.angularSpeed = 500;
 
+        orig = transform.GetChild(0).GetComponent<Renderer>().material.color;
     }
 
     protected void Start()
     {
         // temporary unit adding
         PlayerManager.instance.AddUnit(this);
+
+        agent.speed = 10.0f;
     }
 
     protected void Update()
@@ -55,35 +64,18 @@ public abstract class PlayerUnit : Unit
             agent.SetDestination(transform.position);
         }
 
-        /*
-        Vector3 true_destination = new Vector3(destination.x, transform.position.y, destination.z);
-
-        if (blueprint.movable && Vector3.Distance(transform.position, true_destination) > 1f)
-        {
-            Vector3 direction = destination - transform.position;
-            direction.y = 0;
-            direction.Normalize();
-
-            rigidbody.velocity = direction * blueprint.moveSpeed;
-        }
-        else
-        {
-            rigidbody.velocity = Vector3.zero;
-        }
-        */
-
     }
 
     public void Select()
     {
         selected = true;
-        GetComponent<Renderer>().material.color = blueprint.color * Color.white * GetLevel();
+        transform.GetChild(0).GetComponent<Renderer>().material.color = blueprint.color * 1.1f;
     }
 
     public void Deselect()
     {
         selected = false;
-        GetComponent<Renderer>().material.color = blueprint.color * Color.gray * GetLevel();
+        transform.GetChild(0).GetComponent<Renderer>().material.color = blueprint.color * 0.9f;
     }
 
     public void SetDestination(Vector3 destination)

@@ -17,4 +17,4 @@ MonoBehaviour:
   health: 50
   movable: 1
   moveSpeed: 5
-  color: {r: 0.26295832, g: 0.46873757, b: 0.745283, a: 0}
+  color: {r: 0.4862745, g: 1, b: 0.99215686, a: 0}

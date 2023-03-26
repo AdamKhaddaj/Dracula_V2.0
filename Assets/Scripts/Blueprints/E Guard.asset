@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c9cadce83f596e45a445a311337bf7b, type: 3}
   m_Name: E Guard
   m_EditorClassIdentifier: 
-  health: 5
+  health: 25
   movable: 1
   moveSpeed: 4
-  color: {r: 0.5471698, g: 0.14660019, b: 0.14660019, a: 0}
+  color: {r: 0.83137256, g: 0.35686275, b: 0.36078432, a: 0}
