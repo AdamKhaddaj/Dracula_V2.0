@@ -9,7 +9,7 @@ public class PlayerSupport : PlayerUnit
     {
         base.Start();
         base.agent.angularSpeed = 0;
-        hoverspeed = 1.5f;
+        hoverspeed = 0.75f;
     }
     public override void Action1()
     {
@@ -50,7 +50,7 @@ public class PlayerSupport : PlayerUnit
     {
         base.Update();
         Vector3 hover = new Vector3(0, 0, 0);
-        hover.y = 1 + Mathf.Sin(Time.time * hoverspeed) * 0.25f;
+        hover.y =  0.5f + Mathf.Sin(Time.time * hoverspeed) * 0.25f;
         transform.position = new Vector3(transform.position.x, transform.position.y + hover.y, transform.position.z);
         transform.Rotate(0f, 10f * Time.deltaTime, 0f);
     }

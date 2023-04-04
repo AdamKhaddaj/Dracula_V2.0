@@ -8,37 +8,16 @@ public class PlayerDie : PlayerUnit
     GameObject indicator;
     Vector3 indicatorDir;
 
-    public override void Action1()
-    {
-        // move action
-    }
-
-    public override void Action2()
-    {
-
-    }
-
-    public override void Action3()
-    {
-
-    }
-
-    public override void Action4()
-    {
-    }
-
-    public override void Action5()
-    {
-    }
+    public float flick_y, flick_force, spin_force;
 
     private void Start()
     {
         base.Start();
         indicator = GameObject.CreatePrimitive(PrimitiveType.Sphere);
         indicator.transform.position = gameObject.transform.position;
+        indicator.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
         indicator.GetComponent<Collider>().enabled = false;
         indicator.SetActive(false);
-
         rolling = false;
         testselect = false;
     }
@@ -47,10 +26,14 @@ public class PlayerDie : PlayerUnit
     {
 
         Vector3 flickdir = dir * 4;
-        flickdir.y += 6;
+        flickdir.y += flick_y;
 
-        rigidbody.AddForce(flickdir, ForceMode.Impulse);
-        rigidbody.AddTorque(Random.insideUnitSphere * 7, ForceMode.Impulse);
+        rigidbody.AddForce(flickdir * flick_force, ForceMode.Impulse);
+
+        Vector3 spin = Random.insideUnitSphere;
+        //spin.y = 50;
+
+        rigidbody.AddTorque(spin * spin_force, ForceMode.Impulse);
 
         Invoke("SetRolling", 1);
 
@@ -73,11 +56,9 @@ public class PlayerDie : PlayerUnit
 
     private void Update()
     {
-
         if (testselect)
         {
             //update the position of the indictor such that it follows the mouse along a fixed orbit around the dice, and then flicks in that direction if mouse down
-
             //First, get direction of mouse relative to the dice
 
             int layer_mask = LayerMask.GetMask("Terrain");
@@ -88,13 +69,14 @@ public class PlayerDie : PlayerUnit
             if (Physics.Raycast(ray, out hit, 1000f, layer_mask))
             {
                 // get direction vector
+                
                 indicatorDir = new Vector3(hit.point.x, gameObject.transform.position.y, hit.point.z) - gameObject.transform.position;
             }
 
             Vector3 pos;
 
             indicatorDir.Normalize();
-            indicatorDir *= 3;
+            indicatorDir *= 1.8f;
 
             pos.y = gameObject.transform.position.y;
             pos.x = gameObject.transform.position.x + indicatorDir.x;
@@ -134,45 +116,100 @@ public class PlayerDie : PlayerUnit
         //By checking rotation values along x, y, and z axis at increments of 90 degrees, we can tell what side of the dice is facing up
         //This code borrows from the following: https://levidsmith.com/games/yatzy-dice-game/#dice_value
 
+        //float attackside_chance = ResultChance(1);
+        //float crystalside_chance = ResultChance(2);
+
         if (rotation.x == 180 && rotation.y == 270 ||
             rotation.x == 0 && rotation.z == 90)
         {
-            result = 1; //damage blast
-            Debug.Log("ONE");
+            result = 1; 
+            Debug.Log("DAMANGE BLAST");
         }
         else if (rotation.x == 270)
         {
-            result = 2; //heal blast
-            Debug.Log("TWO");
+            result = 2; 
+            Debug.Log("CRYSTALS GAIN");
 
         }
         else if (rotation.x == 180 && rotation.z == 0 ||
           rotation.x == 0 && rotation.z == 180)
         {
-            result = 3; //get crsytals
-            Debug.Log("THREE");
+            result = 3; 
+            Debug.Log("HEALING BLAST");
 
         }
         else if (rotation.x == 180 && rotation.z == 180 ||
           rotation.x == 0 && rotation.z == 0)
         {
-            result = 4; // idk yet
-            Debug.Log("FOUR");
+            result = 4; 
+            Debug.Log("ATTACK UP");
 
         }
         else if (rotation.x == 90)
         {
-            result = 5; // idk yet
-            Debug.Log("FIVE");
+            result = 5; 
+            Debug.Log("DEATH EXPLODE");
 
         }
         else if (rotation.x == 0 && rotation.z == 270 ||
           rotation.x == 180 && rotation.z == 90)
         {
-            result = 6; // self destruct
-            Debug.Log("SIX");
+            result = 6; 
+            Debug.Log("REROLL");
 
         }
+    }
+
+    private float ResultChance(int dieside)
+    {
+        if (dieside == 1) 
+        { 
+            return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
+        }
+        if (dieside == 2)
+        {
+            return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
+        }
+        if (dieside == 3)
+        {
+            return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
+        }
+        if (dieside == 4)
+        {
+            return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
+        }
+        if (dieside == 5)
+        {
+            return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
+        }
+        if (dieside == 6)
+        {
+            return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
+        }
+        return 0;
+    }
+
+    public override void Action1()
+    {
+        // move action
+    }
+
+    public override void Action2()
+    {
+
+    }
+
+    public override void Action3()
+    {
+
+    }
+
+    public override void Action4()
+    {
+    }
+
+    public override void Action5()
+    {
     }
 
 }

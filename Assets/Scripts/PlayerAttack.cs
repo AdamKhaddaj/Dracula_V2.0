@@ -31,7 +31,7 @@ public class PlayerAttack : PlayerUnit {
             rigidbody.velocity = Vector3.zero;
 
             int layer_mask = LayerMask.GetMask("Enemy");
-            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 12f, layer_mask);
+            Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 3f, layer_mask);
 
             if(colliders.Length > 0) //There is an enemy in aggro
             {
@@ -57,7 +57,7 @@ public class PlayerAttack : PlayerUnit {
 
         if (state == 1) //If this unit has been commanded to move somewhere, nothing should break it from trying to get to that location other than it reaching that location
         {
-            if(Vector3.Distance(transform.position, base.destination) < 1.5f)
+            if(Vector3.Distance(transform.position, base.destination) < 0.3f)
             {
                 state = 0;
             }
@@ -77,7 +77,7 @@ public class PlayerAttack : PlayerUnit {
 
                 //Check if either a) the target is close enough that this unit can attack it, or b) this unit should move towrads it
 
-                if (Vector3.Distance(transform.position, base.destination) < 4f){
+                if (Vector3.Distance(transform.position, base.destination) < 1f){
                     state = 3;
                     base.SetDestination(transform.position);
                 }
@@ -90,27 +90,21 @@ public class PlayerAttack : PlayerUnit {
 
         if (state == 3) //This state means this unit is capable of attacking it's target
         {
-            //first check if the unit exists anymore, if not, stop coroutine
+            //first check if the unit exists anymore, if not, exit state
             if (EnemyManager.instance.GetUnit(target) == null)
             {
                 state = 0;
                 target = -1;
             }
 
-            else 
+            else if (Vector3.Distance(transform.position, EnemyManager.instance.GetUnit(target).transform.position) >= 1f) //if target moves too far away, start moving towards them
             {
-
-                if (!attacking)
-                {
-                    attacking = true;
-                    StartCoroutine(DealDamage(target));
-                }
-
-                if (Vector3.Distance(transform.position, base.destination) > 4f)
-                {
-                    state = 2;
-                }
+                state = 2;
+                base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
             }
+
+            //Otherwise, attack animation will continue playing, and trigger the deal damage function
+
         }
 
         //Animation handling
@@ -135,44 +129,31 @@ public class PlayerAttack : PlayerUnit {
 
     }
 
-    IEnumerator DealDamage(int target)
+    private void DealDamage()
     {
-        //first check if the unit exists anymore, if not, stop coroutine
-        if(EnemyManager.instance.GetUnit(target) == null){
-            attacking = false;
-            yield break;
-        }
-
-        yield return new WaitForSeconds(0.5f); 
-        while(state==3)
+        if (EnemyManager.instance.GetUnit(target) == null)
         {
-            //first check if the unit exists anymore, if not, stop coroutine
-            if (EnemyManager.instance.GetUnit(target) == null)
-            {
-                attacking = false;
-                yield break;
-            }
-
-            //Actually deal the damage
-            EnemyUnit e = EnemyManager.instance.GetUnit(target);
-            e.RemoveHealth(5);
-
-            //DEBUGGING TO SHOW THAT ATTACKING IS HAPPENING
-            Color orig = transform.GetChild(0).GetComponent<Renderer>().material.color;
-            gameObject.transform.GetChild(0).GetComponent<Renderer>().material.color = Color.red;
-            yield return new WaitForSeconds(0.2f); //flash red for a quick second
-            gameObject.transform.GetChild(0).GetComponent<Renderer>().material.color = orig;
-
-            yield return new WaitForSeconds(2f); //attack every two seconds
+            return;
         }
-        attacking = false;
+        //Actually deal the damage
+        EnemyUnit e = EnemyManager.instance.GetUnit(target);
+        e.RemoveHealth(5);
+    }
+
+
+    IEnumerator WaitFrames(int numFrames)
+    {
+        for (int i = 0; i < numFrames; i++)
+        {
+            yield return new WaitForEndOfFrame();
+        }
         yield break;
     }
 
     //None of the following are implemented yet
     public override void Action1() { //should be obsolete now
         int layer_mask = LayerMask.GetMask("Enemy");
-        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position,2f, layer_mask);
+        Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 2f, layer_mask);
 
         for (int i = 0; i < colliders.Length; i++)
         {

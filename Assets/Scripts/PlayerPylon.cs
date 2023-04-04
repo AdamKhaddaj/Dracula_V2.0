@@ -1,6 +1,12 @@
 using UnityEngine;
 
 public class PlayerPylon : PlayerUnit {
+
+    public PlayerPylon pylonFrom;
+    public PlayerPylon pylonTo;
+
+    public PylonModel pylonmodel_prefab;
+
     public override void Action1() {
         if (PlayerManager.instance.GetCrystals() >= 10)
         {
@@ -14,15 +20,48 @@ public class PlayerPylon : PlayerUnit {
     }
 
     public override void Action2() {
-        Debug.Log("create ranger");
+        if (PlayerManager.instance.GetCrystals() >= 10)
+        {
+            PlayerManager.instance.RemoveCrystals(10);
+            PlayerManager.instance.CreateRanger(transform.position);
+        }
+        else
+        {
+            Debug.Log("Not Enough Crystals!");
+        }
     }
 
     public override void Action3()
     {
-        Debug.Log("create healer");
+        if (PlayerManager.instance.GetCrystals() >= 10)
+        {
+            PlayerManager.instance.RemoveCrystals(10);
+            PlayerManager.instance.CreateHealer(transform.position);
+        }
+        else
+        {
+            Debug.Log("Not Enough Crystals!");
+        }
     }
 
     public override void Action4()
+    { //pylon construction
+
+        if (PlayerManager.instance.GetCrystals() >= 50 && PlayerManager.instance.GetStardust() >= 10)
+        {
+
+            PylonModel p = Instantiate(pylonmodel_prefab);
+            p.SetParentPylon(this);
+
+        }
+        else
+        {
+            Debug.Log("Not Enough Crystals!");
+        }
+
+    }
+
+    public override void Action5()
     {
 
         Debug.Log("HEAL MODE");
@@ -39,7 +78,5 @@ public class PlayerPylon : PlayerUnit {
         }
 
     }
-
-    public override void Action5() { }
 
 }

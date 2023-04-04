@@ -8,12 +8,22 @@ public abstract class EnemyUnit : Unit
 
     protected new Rigidbody rigidbody;
 
+    public Animator animator;
+
     private void Awake()
     {
         // unit setup
         Setup(blueprint.health);
 
         rigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
+
+        agent.autoBraking = false;
+        agent.acceleration = 90;
+        agent.angularSpeed = 500;
+
+        agent.speed = 9.0f;
+
 
     }
 
@@ -22,4 +32,5 @@ public abstract class EnemyUnit : Unit
         // temporary unit adding
         EnemyManager.instance.AddUnit(this);
     }
+
 }

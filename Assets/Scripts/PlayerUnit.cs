@@ -40,7 +40,7 @@ public abstract class PlayerUnit : Unit
         // temporary unit adding
         PlayerManager.instance.AddUnit(this);
 
-        agent.speed = 10.0f;
+        agent.speed = 2.5f;
     }
 
     protected void Update()
@@ -53,7 +53,7 @@ public abstract class PlayerUnit : Unit
         }
 
         // NavMeshCode
-        if (blueprint.movable && Vector3.Distance(transform.position, destination) > 1f)
+        if (blueprint.movable && Vector3.Distance(transform.position, destination) > 0.3f)
         {
             agent.isStopped = false;
             agent.SetDestination(destination);

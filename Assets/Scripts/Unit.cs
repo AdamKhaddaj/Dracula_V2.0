@@ -10,11 +10,13 @@ public abstract class Unit : MonoBehaviour {
 
     public NavMeshAgent agent;
 
+    private Color origColor;
 
     protected void Setup(int health) {
         id = nextID++;
         level = 1;
         this.health = health;
+        origColor = transform.GetChild(0).GetComponent<Renderer>().material.color;
     }
 
     public int GetID() {
@@ -38,8 +40,13 @@ public abstract class Unit : MonoBehaviour {
     }
 
     public void RemoveHealth(int x) {
+
         health = Mathf.Max(health - x, 0);
-        if(health == 0)
+
+        transform.GetChild(0).GetComponent<Renderer>().material.color = Color.red;
+        Invoke("ResetColour", 0.1f);
+
+        if (health == 0)
         {
             if(GetComponent<PlayerUnit>() != null)
             {
@@ -50,5 +57,10 @@ public abstract class Unit : MonoBehaviour {
                 EnemyManager.instance.RemoveUnit(id);
             }
         }
+    }
+
+    void ResetColour()
+    {
+        transform.GetChild(0).GetComponent<Renderer>().material.color = origColor;
     }
 }

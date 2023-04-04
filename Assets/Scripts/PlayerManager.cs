@@ -8,6 +8,7 @@ public class PlayerManager : MonoBehaviour {
 
     [Header("Unit Prefabs")]
     [SerializeField] private GameObject attack = null;
+    [SerializeField] private GameObject ranged = null;
     [SerializeField] private GameObject support = null;
     [SerializeField] private GameObject pylon = null;
     [SerializeField] private GameObject die = null;
@@ -20,18 +21,21 @@ public class PlayerManager : MonoBehaviour {
     private Dictionary<int, PlayerUnit> units;
     public List<int> selectedUnits;
 
+    private bool showHealthbar;
+
     private void Awake() {
         // singleton assign
         instance = this;
 
         // resources
         crystals = 50;
-        stardust = 0;
+        stardust = 30;
         divineBlood = 0;
 
         units = new Dictionary<int, PlayerUnit>();
         selectedUnits = new List<int>();
 
+        showHealthbar = false;
     }
 
     private void Start()
@@ -156,6 +160,28 @@ public class PlayerManager : MonoBehaviour {
                 i--;
             }
         }
+
+        //Activate Healthbar
+        if (Input.GetKeyDown(KeyCode.Tab)) //this could be done faster
+        {
+            if (!showHealthbar)
+            {
+                foreach(KeyValuePair<int, PlayerUnit> unit in units)
+                {
+                    unit.Value.transform.Find("HealthbarCanvas").gameObject.SetActive(true);
+                }
+                showHealthbar = true;
+            }
+            else if (showHealthbar)
+            {
+                foreach (KeyValuePair<int, PlayerUnit> unit in units)
+                {
+                    unit.Value.transform.Find("HealthbarCanvas").gameObject.SetActive(false);
+                }
+                showHealthbar = false;
+            }
+        }
+
     }
 
     // custom action 1
@@ -180,6 +206,22 @@ public class PlayerManager : MonoBehaviour {
         for (int i = 0; i < selectedUnits.Count; i++)
         {
             units[selectedUnits[i]].Action3();
+        }
+    }
+
+    public void UIaction4()
+    {
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            units[selectedUnits[i]].Action4();
+        }
+    }
+
+    public void UIaction5()
+    {
+        for (int i = 0; i < selectedUnits.Count; i++)
+        {
+            units[selectedUnits[i]].Action5();
         }
     }
 
@@ -231,6 +273,7 @@ public class PlayerManager : MonoBehaviour {
         divineBlood = Mathf.Max(divineBlood - x, 0);
     }
 
+    //Build nits
     public void CreateWarrior(Vector3 pos)
     {
         //check if area where it's spawning will cause no collisions:
@@ -242,15 +285,63 @@ public class PlayerManager : MonoBehaviour {
         int staticmask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
         int mask = dynamicmask | staticmask;
 
-        var collisioncheck = Physics.OverlapSphere(pos, 1f, mask);
+        var collisioncheck = Physics.OverlapSphere(pos, 0.25f, mask);
 
         while(collisioncheck.Length != 0)
         {
             pos.x += 1; //move it over to the right, this can also change eventually
-            collisioncheck = Physics.OverlapSphere(pos, 1f, mask);
+            collisioncheck = Physics.OverlapSphere(pos, 0.25f, mask);
         }
 
         GameObject g = Instantiate(attack, pos, Quaternion.identity);
+        int layer = LayerMask.NameToLayer("DynamicPlayerUnits");
+        g.layer = layer;
+    }
+
+    public void CreateRanger(Vector3 pos)
+    {
+        //check if area where it's spawning will cause no collisions:
+
+        //radius check value will be constant for now, eventually once this function is updated to spawn any kind of unity, we'd pass through the agent.radius value
+        pos.y = 0.5f;
+        pos.x += 1f;
+        int dynamicmask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
+        int staticmask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+        int mask = dynamicmask | staticmask;
+
+        var collisioncheck = Physics.OverlapSphere(pos, 0.25f, mask);
+
+        while (collisioncheck.Length != 0)
+        {
+            pos.x += 1; //move it over to the right, this can also change eventually
+            collisioncheck = Physics.OverlapSphere(pos, 0.25f, mask);
+        }
+
+        GameObject g = Instantiate(ranged, pos, Quaternion.identity);
+        int layer = LayerMask.NameToLayer("DynamicPlayerUnits");
+        g.layer = layer;
+    }
+
+    public void CreateHealer(Vector3 pos)
+    {
+        //check if area where it's spawning will cause no collisions:
+
+        //radius check value will be constant for now, eventually once this function is updated to spawn any kind of unity, we'd pass through the agent.radius value
+        pos.y = 0.5f;
+        pos.x += 1f;
+        int dynamicmask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
+        int staticmask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+        int mask = dynamicmask | staticmask;
+
+        var collisioncheck = Physics.OverlapSphere(pos, 0.25f, mask);
+
+        while (collisioncheck.Length != 0)
+        {
+            pos.x += 1; //move it over to the right, this can also change eventually
+            collisioncheck = Physics.OverlapSphere(pos, 0.25f, mask);
+        }
+
+        GameObject g = Instantiate(support, pos, Quaternion.identity);
         int layer = LayerMask.NameToLayer("DynamicPlayerUnits");
         g.layer = layer;
     }
@@ -308,6 +399,12 @@ public class PlayerManager : MonoBehaviour {
             if (units[selectedUnits[i]].GetComponent<PlayerAttack>() != null) //TEMPORARY, SINCE THE STATE SYSTEM IS ONLY IMPLEMENTED IN THE MELEE CLASS FOR NOW
             {
                 units[selectedUnits[i]].GetComponent<PlayerAttack>().state = 1;
+                units[selectedUnits[i]].GetComponent<PlayerAttack>().target = -1;
+            }
+            else if (units[selectedUnits[i]].GetComponent<PlayerRanged>() != null)
+            {
+                units[selectedUnits[i]].GetComponent<PlayerRanged>().state = 1;
+                units[selectedUnits[i]].GetComponent<PlayerRanged>().target = -1;
             }
             units[selectedUnits[i]].SetDestination(destination);
         }
@@ -324,6 +421,13 @@ public class PlayerManager : MonoBehaviour {
                 units[selectedUnits[i]].GetComponent<PlayerAttack>().target = EnemyManager.instance.GetUnit(target).GetID();
                 units[selectedUnits[i]].GetComponent<PlayerAttack>().state = 2;
             }
+
+            else if (units[selectedUnits[i]].GetComponent<PlayerRanged>() != null)
+            {
+                units[selectedUnits[i]].GetComponent<PlayerRanged>().target = EnemyManager.instance.GetUnit(target).GetID();
+                units[selectedUnits[i]].GetComponent<PlayerRanged>().state = 2;
+            }
+
             units[selectedUnits[i]].SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
         }
     }

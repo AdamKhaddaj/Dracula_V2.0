@@ -21,8 +21,16 @@ public class Healthbar : MonoBehaviour
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 
-    public void SetOffset(float offset)
+    private void Start()
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y + offset, transform.position.z);
+        SetMaxHealth(GetComponentInParent<Unit>().GetHealth());
+        SetHealth(GetComponentInParent<Unit>().GetHealth());
+
     }
+    private void Update()
+    {
+        transform.rotation = Quaternion.LookRotation(Camera.main.transform.forward, Camera.main.transform.up);
+        SetHealth(GetComponentInParent<Unit>().GetHealth());
+    }
+
 }

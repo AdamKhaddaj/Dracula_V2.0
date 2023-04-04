@@ -8,11 +8,40 @@ public class EnemyManager : MonoBehaviour {
 
     private Dictionary<int, EnemyUnit> units;
 
+    [SerializeField] private GameObject crystal = null;
+
+    private bool showHealthbar;
+
     private void Awake() {
         // singleton assign
         instance = this;
 
         units = new Dictionary<int, EnemyUnit>();
+        showHealthbar = false;
+    }
+
+    private void Update()
+    {
+        //Activate Healthbar
+        if (Input.GetKeyDown(KeyCode.Tab)) //this could be done faster
+        {
+            if (!showHealthbar)
+            {
+                foreach (KeyValuePair<int, EnemyUnit> unit in units)
+                {
+                    unit.Value.transform.Find("HealthbarCanvas").gameObject.SetActive(true);
+                }
+                showHealthbar = true;
+            }
+            else if (showHealthbar)
+            {
+                foreach (KeyValuePair<int, EnemyUnit> unit in units)
+                {
+                    unit.Value.transform.Find("HealthbarCanvas").gameObject.SetActive(false);
+                }
+                showHealthbar = false;
+            }
+        }
     }
 
     public void AddUnit(EnemyUnit unit) {
@@ -22,6 +51,7 @@ public class EnemyManager : MonoBehaviour {
     public void RemoveUnit(int id)
     {
 
+        Instantiate(crystal, GetUnit(id).transform.position, Quaternion.identity);
         Destroy(units[id].gameObject);
 
         if (!units.Remove(id))
@@ -36,5 +66,5 @@ public class EnemyManager : MonoBehaviour {
         units.TryGetValue(id, out e);
         return e;
     }
-    
+
 }
