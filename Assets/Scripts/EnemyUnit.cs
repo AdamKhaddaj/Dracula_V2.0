@@ -1,36 +1,33 @@
 using UnityEngine;
 
-public abstract class EnemyUnit : Unit
-{
-    [SerializeField] public EnemyUnitBlueprint blueprint = null;
+public abstract class EnemyUnit : Unit {
+	[SerializeField] public EnemyUnitBlueprint blueprint = null;
 
-    protected Vector3 destination;
+	protected Vector3 destination;
 
-    protected new Rigidbody rigidbody;
+	protected new Rigidbody rigidbody;
 
-    public Animator animator;
+	public Animator animator;
 
-    private void Awake()
-    {
-        // unit setup
-        Setup(blueprint.health);
+	private void Awake() {
+		// unit setup
+		Setup(blueprint.health);
 
-        rigidbody = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
+		rigidbody = GetComponent<Rigidbody>();
+		animator = GetComponent<Animator>();
 
-        agent.autoBraking = false;
-        agent.acceleration = 90;
-        agent.angularSpeed = 500;
+		agent.autoBraking = false;
+		agent.acceleration = 90;
+		agent.angularSpeed = 1000;
 
-        agent.speed = 9.0f;
+		agent.speed = 9.0f;
 
 
-    }
+	}
 
-    protected void Start()
-    {
-        // temporary unit adding
-        EnemyManager.instance.AddUnit(this);
-    }
+	protected void Start() {
+		// temporary unit adding
+		EnemyManager.instance.AddUnit(this);
+	}
 
 }
