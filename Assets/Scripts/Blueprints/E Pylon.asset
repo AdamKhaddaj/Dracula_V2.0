@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10a41ef3a9d2b9b41bf3b4d8c23ef8c1, type: 3}
-  m_Name: P Ranged
+  m_Script: {fileID: 11500000, guid: 6c9cadce83f596e45a445a311337bf7b, type: 3}
+  m_Name: E Pylon
   m_EditorClassIdentifier: 
-  cost: 10
-  levelUpCost: 40
-  health: 30
-  movable: 1
-  moveSpeed: 2
-  color: {r: 0.5058824, g: 0.9137255, b: 0.6117647, a: 0}
+  health: 50
+  movable: 0
+  moveSpeed: 4
+  color: {r: 0.35652807, g: 0.17326447, b: 0.5849056, a: 0}

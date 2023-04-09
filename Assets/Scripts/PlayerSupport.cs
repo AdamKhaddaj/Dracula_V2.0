@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using static UnityEngine.GraphicsBuffer;
 
 public class PlayerSupport : PlayerUnit {
@@ -7,6 +8,8 @@ public class PlayerSupport : PlayerUnit {
 
 	[SerializeField] public int state; //only serialize field so it can be seen for debugging purposes
 	public int target;
+
+	private bool healing;
 
 	private LineRenderer line;
 
@@ -18,6 +21,7 @@ public class PlayerSupport : PlayerUnit {
 		hoverspeed = 0.75f;
 		state = 0;
 		target = -1;
+		healing = false;
 
 		line = GetComponent<LineRenderer>();
 
@@ -77,7 +81,6 @@ public class PlayerSupport : PlayerUnit {
 					state = 3;
 					base.SetDestination(transform.position);
 
-					Debug.Log("setting true");
 				} else {
 					base.SetDestination(PlayerManager.instance.GetUnit(target).transform.position);
 				}
@@ -90,8 +93,8 @@ public class PlayerSupport : PlayerUnit {
 			if (PlayerManager.instance.GetUnit(target) == null) {
 				state = 0;
 				target = -1;
-
-			} else if (Vector3.Distance(transform.position, PlayerManager.instance.GetUnit(target).transform.position) >= 5f) //if target moves too far away, start moving towards them
+			} 
+			else if (Vector3.Distance(transform.position, PlayerManager.instance.GetUnit(target).transform.position) >= 5f) //if target moves too far away, start moving towards them
 			  {
 				state = 2;
 				base.SetDestination(PlayerManager.instance.GetUnit(target).transform.position);
@@ -108,6 +111,12 @@ public class PlayerSupport : PlayerUnit {
 				line.positionCount = 2;
 				line.SetPosition(0, startPosition);
 				line.SetPosition(1, endPosition);
+
+                if (!healing)
+                {
+					healing = true;
+					HealUnit();
+				}
 			}
 		}
 
@@ -116,5 +125,19 @@ public class PlayerSupport : PlayerUnit {
 		transform.position = new Vector3(transform.position.x, transform.position.y + hover.y, transform.position.z);
 		transform.Rotate(0f, 10f * Time.deltaTime, 0f);
 
+	}
+	
+	private void HealUnit()
+    {
+		if (PlayerManager.instance.GetUnit(target) != null && state == 3)
+		{
+			PlayerManager.instance.GetUnit(target).AddHealth(1);
+			Invoke("HealUnit", 1f);
+		}
+        else
+        {
+			healing = false;
+			return;
+        }
 	}
 }

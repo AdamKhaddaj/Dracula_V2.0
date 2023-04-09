@@ -88,7 +88,7 @@ public class PlayerRanged : PlayerUnit {
 				base.SetDestination(EnemyManager.instance.GetUnit(target).transform.position);
 			} else //Otherwise, attack animation will continue playing, and trigger the deal damage function
 			  {
-				transform.LookAt(EnemyManager.instance.GetUnit(target).transform);
+				transform.rotation = Quaternion.Euler(0f, Quaternion.LookRotation((EnemyManager.instance.GetUnit(target).transform.position - transform.position), Vector3.up).eulerAngles.y, 0f);
 			}
 
 		}

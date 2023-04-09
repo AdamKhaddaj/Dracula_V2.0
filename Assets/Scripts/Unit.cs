@@ -7,6 +7,7 @@ public abstract class Unit : MonoBehaviour {
 	[SerializeField] private int id;
 	private int level;
 	[SerializeField] private int health;
+	private int maxhealth;
 
 	public NavMeshAgent agent;
 
@@ -17,6 +18,7 @@ public abstract class Unit : MonoBehaviour {
 		id = nextID++;
 		level = 1;
 		this.health = health;
+		maxhealth = health;
 		hurtmat = Resources.Load<Material>("Damage");
 		origmat = transform.GetChild(0).GetComponent<Renderer>().material;
 	}
@@ -37,7 +39,21 @@ public abstract class Unit : MonoBehaviour {
 		return health;
 	}
 
+	public int GetMaxHealth()
+    {
+		return maxhealth;
+    }
+
 	public void AddHealth(int x) {
+        if (health == maxhealth)
+        {
+			return;
+        }
+		else if((health+x > maxhealth))
+        {
+			health = maxhealth;
+			return;
+        }
 		health += x;
 	}
 

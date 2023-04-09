@@ -19,7 +19,7 @@ public class Healthbar : MonoBehaviour {
 	}
 
 	private void Start() {
-		SetMaxHealth(GetComponentInParent<Unit>().GetHealth());
+		SetMaxHealth(GetComponentInParent<Unit>().GetMaxHealth());
 		SetHealth(GetComponentInParent<Unit>().GetHealth());
 
 	}

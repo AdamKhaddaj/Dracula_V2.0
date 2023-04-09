@@ -246,7 +246,7 @@ public class PlayerManager : MonoBehaviour {
 		divineBlood = Mathf.Max(divineBlood - x, 0);
 	}
 
-	//Build nits
+	//Build units
 	public void CreateWarrior(Vector3 pos) {
 		//check if area where it's spawning will cause no collisions:
 

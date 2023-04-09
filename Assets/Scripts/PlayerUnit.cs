@@ -32,23 +32,22 @@ public abstract class PlayerUnit : Unit {
 		agent.autoBraking = false;
 		agent.acceleration = 90;
 		agent.angularSpeed = 1800;
+		agent.speed = 2.5f;
+
+
 	}
 
 	protected void Start() {
 		// temporary unit adding
 		PlayerManager.instance.AddUnit(this);
-
-		agent.speed = 2.5f;
 	}
 
 	protected void Update() {
 
-		//temp fix for while PlayerUnit contains both dynamic and static units
 		if ((GetComponent<PlayerPylon>() != null) || (GetComponent<PlayerDie>() != null)) {
 			return;
 		}
 
-		// NavMeshCode
 		if (blueprint.movable && Vector3.Distance(transform.position, destination) > 0.3f) {
 			agent.isStopped = false;
 			agent.SetDestination(destination);
