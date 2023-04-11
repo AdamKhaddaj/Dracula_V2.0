@@ -5,7 +5,6 @@ using System;
 public class PlayerAttack : PlayerUnit {
 
 	[SerializeField] public int state; //only serialize field so it can be seen for debugging purposes
-	public int target;
 	private bool attacking;
 
 	private void Start() {
@@ -14,7 +13,6 @@ public class PlayerAttack : PlayerUnit {
 		//For now, 0 = idle, 1 = moving, 2 = moving towards enemy, 3 = attacking
 		//Target will be the ID of the enemy unit it is targetting for either attacking or moving towards, or -1 if it is not targetting anything
 		state = 0;
-		target = -1;
 		attacking = false;
 
 		//Animation stuff

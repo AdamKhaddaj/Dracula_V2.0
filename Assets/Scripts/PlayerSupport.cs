@@ -7,7 +7,6 @@ public class PlayerSupport : PlayerUnit {
 	[SerializeField] public float hoverspeed;
 
 	[SerializeField] public int state; //only serialize field so it can be seen for debugging purposes
-	public int target;
 
 	private bool healing;
 
@@ -20,7 +19,6 @@ public class PlayerSupport : PlayerUnit {
 		base.agent.angularSpeed = 0;
 		hoverspeed = 0.75f;
 		state = 0;
-		target = -1;
 		healing = false;
 
 		line = GetComponent<LineRenderer>();

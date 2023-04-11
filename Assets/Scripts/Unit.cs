@@ -13,8 +13,11 @@ public abstract class Unit : MonoBehaviour {
 
 	private Material hurtmat;
 	private Material origmat;
+	public int target;
+
 
 	protected void Setup(int health) {
+		target = -1;
 		id = nextID++;
 		level = 1;
 		this.health = health;

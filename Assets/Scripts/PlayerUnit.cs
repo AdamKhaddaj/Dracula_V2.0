@@ -32,7 +32,7 @@ public abstract class PlayerUnit : Unit {
 		agent.autoBraking = false;
 		agent.acceleration = 90;
 		agent.angularSpeed = 1800;
-		agent.speed = 2.5f;
+		agent.speed = 3.0f;
 
 
 	}
