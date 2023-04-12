@@ -48,8 +48,19 @@ public class PlayerManager : MonoBehaviour {
 		// movement handler
 		if (Input.GetMouseButtonDown(1)) {
 			if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out RaycastHit hit)) {
+
 				if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
-					MoveSelectedUnits(hit.point);
+					if (hit.transform.gameObject.tag == "PalaceFloor") // a weird workaround for navmesh not being able to work with dynamic map obstacles
+					{
+						if (EnemyManager.instance.barrierup == false)
+						{
+							MoveSelectedUnits(hit.point);
+						}
+					}
+                    else
+                    {
+						MoveSelectedUnits(hit.point);
+					}
 				} else if (hit.transform.gameObject.GetComponent<PlayerUnit>() != null) {
 					TargetMoveHealers(hit.transform.gameObject.GetComponent<PlayerUnit>().GetID());
 				} else if (hit.transform.gameObject.GetComponent<EnemyUnit>() != null) {
@@ -84,7 +95,7 @@ public class PlayerManager : MonoBehaviour {
 			if (units[selectedUnits[i]].GetComponent<PlayerRanged>() != null) {
 				pylonstate = 0;
 				healerstate = 0;
-				rangerstate = 0;
+				meleestate = 0;
 			}
 
 		}
@@ -100,7 +111,6 @@ public class PlayerManager : MonoBehaviour {
 			UIManager.instance.SetUIstate(0);
 		} else {
 			if (pylonstate == 1) {
-
 				UIManager.instance.SetUIstate(1);
 			}
 			if (meleestate == 1) {
@@ -114,39 +124,6 @@ public class PlayerManager : MonoBehaviour {
 			}
 		}
 
-		// temporary action handling
-
-
-		// custom action 2
-		if (Input.GetKeyDown(KeyCode.Alpha2)) {
-			for (int i = 0; i < selectedUnits.Count; i++) {
-				units[selectedUnits[i]].Action2();
-			}
-		}
-
-		// custom action 3
-		if (Input.GetKeyDown(KeyCode.Alpha3)) {
-			for (int i = 0; i < selectedUnits.Count; i++) {
-				units[selectedUnits[i]].Action3();
-			}
-		}
-
-		// level up action
-		if (Input.GetKeyDown(KeyCode.Alpha4)) {
-			for (int i = 0; i < selectedUnits.Count; i++) {
-				units[selectedUnits[i]].LevelUp();
-			}
-		}
-
-		// harvest action
-		if (Input.GetKeyDown(KeyCode.Alpha5)) {
-			for (int i = 0; i < selectedUnits.Count; i++) {
-				units[selectedUnits[i]].Harvest();
-
-				// unit is deleted so move iteration back a step
-				i--;
-			}
-		}
 
 		//Activate Healthbar
 		if (Input.GetKeyDown(KeyCode.Tab)) //this could be done faster

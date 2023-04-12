@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour {
 		ui.transform.Find("WarriorIcons").gameObject.SetActive(false);
 		ui.transform.Find("HealerIcons").gameObject.SetActive(false);
 		ui.transform.Find("PylonIcons").gameObject.SetActive(false);
+		ui.transform.Find("RangerIcons").gameObject.SetActive(false);
 
 		UIstate = state;
 
@@ -76,7 +77,7 @@ public class UIManager : MonoBehaviour {
 
 		if (UIstate == 4) // Display Ranged Abilities
 		{
-
+			ui.transform.Find("RangerIcons").gameObject.SetActive(true);
 		}
 
 	}

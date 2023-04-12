@@ -12,7 +12,7 @@ public class PlayerSupport : PlayerUnit {
 
 	private LineRenderer line;
 
-	public GameObject indicator;
+	public HealBlast indicator;
 
 	private void Start() {
 		base.Start();
@@ -25,7 +25,8 @@ public class PlayerSupport : PlayerUnit {
 
 	}
 	public override void Action1() {
-		Instantiate(indicator);
+		HealBlast b = Instantiate(indicator);
+		b.SetParent(this);
 	}
 
 	public override void Action2() {
@@ -39,7 +40,12 @@ public class PlayerSupport : PlayerUnit {
 	public override void Action4() {
 	}
 
-	public override void Action5() {
+	public override void Action5()
+	{
+
+		PlayerManager.instance.AddCrystals(blueprint.cost);
+		Destroy(this);
+
 	}
 
 	// Update is called once per frame
@@ -129,7 +135,7 @@ public class PlayerSupport : PlayerUnit {
     {
 		if (PlayerManager.instance.GetUnit(target) != null && state == 3)
 		{
-			PlayerManager.instance.GetUnit(target).AddHealth(1);
+			PlayerManager.instance.GetUnit(target).AddHealth(2);
 			Invoke("HealUnit", 1f);
 		}
         else

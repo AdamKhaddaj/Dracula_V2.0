@@ -44,7 +44,7 @@ public abstract class PlayerUnit : Unit {
 
 	protected void Update() {
 
-		if ((GetComponent<PlayerPylon>() != null) || (GetComponent<PlayerDie>() != null)) {
+		if ((GetComponent<PlayerPylon>() != null) || (GetComponent<PlayerDie>() != null) || (GetComponent<SiegePylon>() != null)) {
 			return;
 		}
 
@@ -97,6 +97,5 @@ public abstract class PlayerUnit : Unit {
 	public void Harvest() {
 		PlayerManager.instance.RemoveUnit(GetID());
 		PlayerManager.instance.AddCrystals(blueprint.cost);
-
 	}
 }

@@ -167,11 +167,11 @@ MonoBehaviour:
   id: 0
   health: 0
   agent: {fileID: 7863195162870088776}
+  target: 0
   blueprint: {fileID: 11400000, guid: d1c34120fa7e7c3459b8d69d7518fd5d, type: 2}
   hoverspeed: 0
   state: 0
-  target: 0
-  indicator: {fileID: 624569097321416708, guid: 3346b1917298d474ba91fd20932d1f64, type: 3}
+  indicator: {fileID: 1684623471984946555, guid: 3346b1917298d474ba91fd20932d1f64, type: 3}
 --- !u!195 &7863195162870088776
 NavMeshAgent:
   m_ObjectHideFlags: 0

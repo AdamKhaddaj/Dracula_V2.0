@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public abstract class EnemyUnit : Unit {
 	[SerializeField] public EnemyUnitBlueprint blueprint = null;
@@ -34,7 +35,7 @@ public abstract class EnemyUnit : Unit {
     protected void Update()
     {
 
-		if (GetComponent<EnemyPylon>() != null)
+		if (GetComponent<EnemyPylon>() != null || GetComponent<EnemyBarrier>() != null || GetComponent<DraculaHitbox>() != null)
 		{
 			return;
 		}
@@ -55,5 +56,17 @@ public abstract class EnemyUnit : Unit {
 	{
 		this.destination = destination;
 	}
+
+	public void TempSpeedChange()
+    {
+		StartCoroutine(SpeedChangeCoroutine());
+    }
+
+	public IEnumerator SpeedChangeCoroutine()
+    {
+		agent.speed = 1f;
+		yield return new WaitForSeconds(6f);
+		agent.speed = 2.5f;
+    }
 
 }

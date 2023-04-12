@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - PalaceFloor
   layers:
   - Default
   - TransparentFX
@@ -16,9 +17,9 @@ TagManager:
   - StaticPlayerUnits
   - DicePlayerUnit
   - Obstacles
-  - Indicators
-  - 
-  - 
+  - Barrier
+  - PalaceFloor
+  - Sieger
   - 
   - 
   - 
@@ -38,9 +39,6 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Indicators
-    uniqueID: 4212326433
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

@@ -131,6 +131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 6662296186619977340, guid: b6a5389714683f1468f5ddd481a2ae73, type: 3}
   parentpylon: {fileID: 0}
+  sieger: {fileID: 8395313754353462601, guid: c2ae7abb3bc1517408bdf6e7595fc46e, type: 3}
 --- !u!1001 &8039595435570688496
 PrefabInstance:
   m_ObjectHideFlags: 0

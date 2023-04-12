@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour {
 	// singleton instance
+
 	public static EnemyManager instance;
 
 	private Dictionary<int, EnemyUnit> units;
@@ -13,6 +14,8 @@ public class EnemyManager : MonoBehaviour {
 	private bool showHealthbar;
 
 	[SerializeField] private EnemyGuard guard = null;
+
+	public bool barrierup = true;
 
 	private void Awake() {
 		// singleton assign
@@ -45,6 +48,21 @@ public class EnemyManager : MonoBehaviour {
 	}
 
 	public void RemoveUnit(int id) {
+
+		if(GetUnit(id).gameObject.layer == LayerMask.NameToLayer("Barrier")){ //A very strange fix for navmesh not being able to accomodate for dynamic map obstacles
+			barrierup = false;
+        }
+
+		if (GetUnit(id).gameObject.name == "BossUnit")
+		{
+			GameObject dracula = GameObject.Find("Dracula Boss");
+			Destroy(dracula);
+			for (int i = 0; i < 50; i++)
+            {
+				Instantiate(crystal, dracula.transform.position, Quaternion.identity);
+			}
+			return;
+		}
 
 		Instantiate(crystal, GetUnit(id).transform.position, Quaternion.identity);
 		Destroy(units[id].gameObject);

@@ -17,7 +17,6 @@ public class PlayerPylon : PlayerUnit {
 		}
 
 		base.Start();
-
 		line = GetComponent<LineRenderer>();
 	}
 
@@ -102,18 +101,10 @@ public class PlayerPylon : PlayerUnit {
 
 	}
 
-	public override void Action5() {
+	public override void Action5()
+	{
 
-		Debug.Log("HEAL MODE");
+		Harvest();
 
-		int layer_mask = LayerMask.GetMask("Player");
-		Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 4f, layer_mask);
-
-		for (int i = 0; i < colliders.Length; i++) {
-			PlayerUnit playerUnit = colliders[i].GetComponent<PlayerUnit>();
-
-			playerUnit.AddHealth(5);
-			Debug.Log("THANKS!");
-		}
 	}
 }

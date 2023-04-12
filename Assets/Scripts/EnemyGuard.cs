@@ -66,6 +66,7 @@ public class EnemyGuard : EnemyUnit {
 
                 int dynamic_layer_mask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
                 int static_layer_mask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+                int sieger_layer_mask = 1 << LayerMask.NameToLayer("Sieger");
                 int layermask = static_layer_mask | dynamic_layer_mask;
                 Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 6f, layermask);
 
@@ -228,6 +229,32 @@ public class EnemyGuard : EnemyUnit {
                     target = closest_target;
                     state = 1;
                     base.SetDestination(PlayerManager.instance.GetUnit(target).transform.position);
+                }
+                else
+                {
+                    Collider[] colliders2 = Physics.OverlapSphere(gameObject.transform.position, 1000f, LayerMask.GetMask("DynamicPlayerUnits"));
+
+                    if (colliders2.Length > 0) //There is an enemy in aggro
+                    {
+                        //A target needs to be picked if there are multiple enemies. Pick the nearest enemy
+                        float closest = Mathf.Infinity;
+                        int closest_target = -1;
+
+                        for (int i = 0; i < colliders2.Length; i++)
+                        {
+                            PlayerUnit playerUnit = colliders2[i].GetComponent<PlayerUnit>();
+                            if (Vector3.Distance(transform.position, playerUnit.gameObject.transform.position) < closest)
+                            {
+                                closest_target = playerUnit.GetID();
+                                closest = Vector3.Distance(transform.position, playerUnit.gameObject.transform.position);
+                            }
+                        }
+
+                        target = closest_target;
+                        state = 1;
+                        base.SetDestination(PlayerManager.instance.GetUnit(target).transform.position);
+                    }
+
                 }
             }
 

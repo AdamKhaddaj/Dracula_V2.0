@@ -10,14 +10,10 @@ Shader "Custom/IndicatorShader"
 
     SubShader
     {
-
-
         ZTest Always
-
 
         Tags { "RenderType"="Opaque"  "Queue" = "Transparent" }
         LOD 200
-
 
         CGPROGRAM
         // Physically based Standard lighting model, and enable shadows on all light types
@@ -27,6 +23,7 @@ Shader "Custom/IndicatorShader"
         #pragma target 3.0
 
         sampler2D _MainTex;
+        float3 _Color;
 
         struct Input
         {
@@ -35,7 +32,6 @@ Shader "Custom/IndicatorShader"
 
         half _Glossiness;
         half _Metallic;
-        fixed4 _Color;
 
         // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
         // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
@@ -58,7 +54,7 @@ Shader "Custom/IndicatorShader"
                 o.Smoothness = _Glossiness;
             }
             else if (abs(length(pos - float2(radius, radius)) < radius)) {
-                o.Albedo = float3(0.0, 0.2, 0.6);
+                o.Albedo = _Color;
                 o.Alpha = 0.5;
                 o.Metallic = _Metallic;
                 o.Smoothness = _Glossiness;

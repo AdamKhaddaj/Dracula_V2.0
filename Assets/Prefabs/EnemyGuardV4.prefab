@@ -904,9 +904,11 @@ MonoBehaviour:
   id: 0
   health: 0
   agent: {fileID: 7659843155813217156}
-  outline: {fileID: 0}
+  target: 0
   blueprint: {fileID: 11400000, guid: c58c2ac9119795c4794b4d11fa333338, type: 2}
   animator: {fileID: 0}
+  type: 0
+  state: 0
 --- !u!1 &7517097940685148092
 GameObject:
   m_ObjectHideFlags: 0

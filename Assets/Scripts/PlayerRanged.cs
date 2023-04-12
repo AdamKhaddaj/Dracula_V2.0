@@ -5,7 +5,10 @@ using UnityEngine;
 public class PlayerRanged : PlayerUnit {
 
 	[SerializeField] public int state; //only serialize field so it can be seen for debugging purposes
-	private bool attacking;
+
+	private bool poweredup;
+
+	[SerializeField] private RangedBlast rangedindicator = null;
 
 	private void Start() {
 		base.Start();
@@ -13,8 +16,7 @@ public class PlayerRanged : PlayerUnit {
 		//For now, 0 = idle, 1 = moving, 2 = moving towards enemy, 3 = attacking
 		//Target will be the ID of the enemy unit it is targetting for either attacking or moving towards, or -1 if it is not targetting anything
 		state = 0;
-		attacking = false;
-
+		poweredup = false;
 	}
 
 	private void Update() {
@@ -114,21 +116,40 @@ public class PlayerRanged : PlayerUnit {
 		e.RemoveHealth(5);
 	}
 
+	private void ShootProjectile()
+    {
 
-	IEnumerator WaitFrames(int numFrames) {
-		for (int i = 0; i < numFrames; i++) {
-			yield return new WaitForEndOfFrame();
+    }
+
+	public void PowerUp()
+	{
+		StartCoroutine(PowerUpCoroutine());
+	}
+
+	public IEnumerator PowerUpCoroutine()
+	{
+		poweredup = true;
+		agent.speed = 3.75f;
+		gameObject.transform.localScale *= 2;
+		animator.speed = 1.5f;
+		yield return new WaitForSeconds(6f);
+		agent.speed = 2.5f;
+		gameObject.transform.localScale *= 0.5f;
+		animator.speed = 1;
+		poweredup = false;
+	}
+
+	public override void Action1() { //do a cone of projectiles
+		RangedBlast r = Instantiate(rangedindicator);
+		r.SetParent(this.gameObject);
+	}
+
+	public override void Action2()
+	{ //Go supercharge
+        if (!poweredup)
+        {
+			PowerUp();
 		}
-		yield break;
-	}
-
-	//None of the following are implemented yet
-	public override void Action1() { //should be obsolete now
-
-	}
-
-	public override void Action2() {
-
 	}
 
 	public override void Action3() {
@@ -136,5 +157,8 @@ public class PlayerRanged : PlayerUnit {
 	}
 
 	public override void Action4() { }
-	public override void Action5() { }
+	public override void Action5()
+	{
+		Harvest();
+	}
 }

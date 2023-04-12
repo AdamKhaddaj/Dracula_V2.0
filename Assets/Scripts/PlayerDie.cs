@@ -100,72 +100,107 @@ public class PlayerDie : PlayerUnit {
 	}
 
 	private void FindResult() {
-		int result = 0;
 
-		Vector3 rotation = gameObject.transform.eulerAngles;
+		int result = ResultChance();
 
-		rotation = new Vector3(Mathf.RoundToInt(rotation.x), Mathf.RoundToInt(rotation.y), Mathf.RoundToInt(rotation.z));
+		Debug.Log(result);
 
-		//By checking rotation values along x, y, and z axis at increments of 90 degrees, we can tell what side of the dice is facing up
-		//This code borrows from the following: https://levidsmith.com/games/yatzy-dice-game/#dice_value
+        if (result == 0) //ATTACK UP
+        {
+			int layer_mask = LayerMask.GetMask("DynamicPlayerUnits");
+			Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 8f, layer_mask);
 
-		//float attackside_chance = ResultChance(1);
-		//float crystalside_chance = ResultChance(2);
-
-		if (rotation.x == 180 && rotation.y == 270 ||
-			rotation.x == 0 && rotation.z == 90) {
-			result = 1;
-			Debug.Log("DAMANGE BLAST");
-		} else if (rotation.x == 270) {
-			result = 2;
-			Debug.Log("CRYSTALS GAIN");
-
-		} else if (rotation.x == 180 && rotation.z == 0 ||
-			rotation.x == 0 && rotation.z == 180) {
-			result = 3;
-			Debug.Log("HEALING BLAST");
-
-		} else if (rotation.x == 180 && rotation.z == 180 ||
-			rotation.x == 0 && rotation.z == 0) {
-			result = 4;
-			Debug.Log("ATTACK UP");
-
-		} else if (rotation.x == 90) {
-			result = 5;
-			Debug.Log("DEATH EXPLODE");
-
-		} else if (rotation.x == 0 && rotation.z == 270 ||
-			rotation.x == 180 && rotation.z == 90) {
-			result = 6;
-			Debug.Log("REROLL");
-
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				if(colliders[i].gameObject.GetComponent<PlayerAttack>() != null)
+                {
+					colliders[i].gameObject.GetComponent<PlayerAttack>().PowerUp();
+				}
+				if (colliders[i].gameObject.GetComponent<PlayerRanged>() != null)
+				{
+					colliders[i].gameObject.GetComponent<PlayerRanged>().PowerUp();
+				}
+			}
 		}
+
+		if (result == 1) //Damage Blast
+		{
+			int layer_mask = LayerMask.GetMask("Enemy");
+			Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 8f, layer_mask);
+
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				colliders[i].gameObject.GetComponent<Unit>().RemoveHealth(5);
+			}
+		}
+
+		if (result == 2) //Gain Crystals
+		{
+			PlayerManager.instance.AddCrystals(50);
+		}
+		if (result == 3) //Explode!
+		{
+			int dynamic_layer_mask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
+			int static_layer_mask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+			int enemy_layer_mask = 1 << LayerMask.NameToLayer("Enemy");
+			int layermask = static_layer_mask | dynamic_layer_mask | enemy_layer_mask;
+			Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 8f, layermask);
+
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				colliders[i].gameObject.GetComponent<Unit>().RemoveHealth(5);
+			}
+			Destroy(gameObject);
+		}
+		if (result == 4) //Reroll
+		{
+			Debug.Log("Reroll!");
+		}
+		if (result == 5) //Heal
+		{
+			int dynamic_layer_mask = 1 << LayerMask.NameToLayer("DynamicPlayerUnits");
+			int static_layer_mask = 1 << LayerMask.NameToLayer("StaticPlayerUnits");
+			int siege_layer_mask = 1 << LayerMask.NameToLayer("Sieger");
+			int layermask = static_layer_mask | dynamic_layer_mask | siege_layer_mask;
+			Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 8f, layermask);
+
+			for (int i = 0; i < colliders.Length; i++)
+			{
+				colliders[i].gameObject.GetComponent<Unit>().AddHealth(10);
+			}
+		}
+
 	}
 
-	private float ResultChance(int dieside) {
-		if (dieside == 1) {
-			return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
-		}
-		if (dieside == 2) {
-			return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
-		}
-		if (dieside == 3) {
-			return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
-		}
-		if (dieside == 4) {
-			return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
-		}
-		if (dieside == 5) {
-			return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
-		}
-		if (dieside == 6) {
-			return Mathf.Abs(1 - gameObject.transform.eulerAngles.y);
-		}
-		return 0;
+	private int ResultChance() {
+
+		float[] sides = new float[6];
+
+		sides[0] = Mathf.Abs(transform.up.y - 1); //atkup
+		sides[1] = Mathf.Abs(transform.right.y - 1); //blast
+		sides[2] = Mathf.Abs(transform.forward.y - 1); //crystl
+		sides[3] = Mathf.Abs(transform.forward.y - (-1)); //deatj
+		sides[4] = Mathf.Abs(transform.right.y - (-1)); //reroll
+		sides[5] = Mathf.Abs(transform.up.y - (-1)); //heal
+
+		float smallest = Mathf.Infinity;
+		int smallestindex = -1;
+
+		for(int i = 0; i < 6; i++)
+        {
+			if(sides[i] < smallest)
+            {
+				smallest = sides[i];
+				smallestindex = i;
+            }
+        }
+
+		return smallestindex;
+		
 	}
 
 	public override void Action1() {
-		// move action
+		
 	}
 
 	public override void Action2() {

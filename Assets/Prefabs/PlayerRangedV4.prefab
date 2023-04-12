@@ -684,9 +684,10 @@ MonoBehaviour:
   id: 0
   health: 0
   agent: {fileID: 6612717184926332150}
+  target: 0
   blueprint: {fileID: 11400000, guid: 45d435148c0e3644b95cfc68432066f1, type: 2}
   state: 0
-  target: 0
+  rangedindicator: {fileID: -3285680822088658626, guid: 14f2ac8987b2fb64c850ac86ecf59605, type: 3}
 --- !u!114 &3508226621176629201
 MonoBehaviour:
   m_ObjectHideFlags: 0

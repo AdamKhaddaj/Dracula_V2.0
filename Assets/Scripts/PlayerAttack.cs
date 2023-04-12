@@ -5,7 +5,7 @@ using System;
 public class PlayerAttack : PlayerUnit {
 
 	[SerializeField] public int state; //only serialize field so it can be seen for debugging purposes
-	private bool attacking;
+	private bool attacking, poweredup;
 
 	private void Start() {
 		base.Start();
@@ -14,6 +14,7 @@ public class PlayerAttack : PlayerUnit {
 		//Target will be the ID of the enemy unit it is targetting for either attacking or moving towards, or -1 if it is not targetting anything
 		state = 0;
 		attacking = false;
+		poweredup = false;
 
 		//Animation stuff
 		animator.SetBool("isRunning", false);
@@ -121,29 +122,39 @@ public class PlayerAttack : PlayerUnit {
 		e.RemoveHealth(5);
 	}
 
+	public void PowerUp()
+	{
+		StartCoroutine(PowerUpCoroutine());
+	}
 
-	IEnumerator WaitFrames(int numFrames) {
-		for (int i = 0; i < numFrames; i++) {
-			yield return new WaitForEndOfFrame();
-		}
-		yield break;
+	public IEnumerator PowerUpCoroutine()
+	{
+		poweredup = true;
+		agent.speed = 3.75f;
+		gameObject.transform.localScale *= 2;
+		animator.speed = 1.5f;
+		yield return new WaitForSeconds(6f);
+		agent.speed = 2.5f;
+		gameObject.transform.localScale *= 0.5f;
+		animator.speed = 1;
+		poweredup = false;
 	}
 
 	//None of the following are implemented yet
-	public override void Action1() { //should be obsolete now
+	public override void Action1() { //Freeze all enemies around
 		int layer_mask = LayerMask.GetMask("Enemy");
-		Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 2f, layer_mask);
+		Collider[] colliders = Physics.OverlapSphere(gameObject.transform.position, 8f, layer_mask);
 
 		for (int i = 0; i < colliders.Length; i++) {
 			EnemyUnit enemyUnit = colliders[i].GetComponent<EnemyUnit>();
-
-			enemyUnit.RemoveHealth(10);
-			Debug.Log("OUCH");
+			enemyUnit.TempSpeedChange();
 		}
 	}
-
-	public override void Action2() {
-		Debug.Log("PULLING AGGRO!");
+	public override void Action2() { //Go supercharge
+        if (!poweredup)
+        {
+			PowerUp();
+        }
 	}
 
 	public override void Action3() {
@@ -151,5 +162,9 @@ public class PlayerAttack : PlayerUnit {
 	}
 
 	public override void Action4() { }
-	public override void Action5() { }
+	public override void Action5() {
+
+		Harvest();
+	
+	}
 }
