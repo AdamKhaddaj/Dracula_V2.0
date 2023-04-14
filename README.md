@@ -1,4 +1,4 @@
-# Dracula_V2.0
+# "Dracula" A Unity RTS Game Demo
 
 This is a demo of a game development project created with Unity.
 
