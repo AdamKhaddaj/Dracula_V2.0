@@ -2,7 +2,7 @@
 
 This is a demo of a game development project created with Unity.
 
-All scripts, shaders, and models were created by Adam Khaddaj and Leo McCarthy-Kennedy.
+All scripts, shaders, and models were created by Adam Khaddaj and Leo McCarthy-Kennedy (https://github.com/LeoMcCarthyKennedy)
 
 Character rigs / animations were made using Mixamo.
 
