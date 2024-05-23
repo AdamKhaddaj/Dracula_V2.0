@@ -15,8 +15,8 @@
   <body>
     <a id="skip-to-content" href="#content">Skip to the content.</a>
 
-    <header class="page-header" role="banner">
-      <h1 class="project-name" style="margin-bottom: 0">Dracula, a Real-Time Strategy Game Demo in Unity</h1>
+    <header class="page-header" role="banner" style="padding: 10">
+      <h1 class="project-name">Dracula, a Real-Time Strategy Game Demo in Unity</h1>
       <br>
       {% if site.github.is_project_page %}
         <a href="{{ site.github.repository_url }}" class="btn">View on GitHub</a>
@@ -28,7 +28,11 @@
     </header>
 
     <main id="content" class="main-content" role="main">
-      test test 123
+      This is a prototype that mainly explores real time strategy systems such as hierarchical unit management, enemy AI behaviors, selection / UI handling, etc.
+      <header>
+        <h1>This is a header inside the main block</h1>
+      </header>
+      Custom shaders are used for the reflective crystal textures, barrier textures, etc. Lighting is handled using Unity's built in systems.
 
       <footer class="site-footer">
         {% if site.github.is_project_page %}
