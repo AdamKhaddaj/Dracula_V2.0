@@ -1,4 +1,4 @@
-# "Dracula" A Unity RTS Game Demo
+# "Dracula", a Unity RTS Game Demo
 
 This is a demo of a game development project created with Unity.
 
